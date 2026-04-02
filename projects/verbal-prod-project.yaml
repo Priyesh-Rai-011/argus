@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: verbal-prod
+  namespace: argocd
+spec:
+  description: "Priyesh-Rai-011 Production — account 183295435445"
+  sourceRepos:
+    - https://github.com/Priyesh-Rai-011/verbal-aws-apps
+  destinations:
+    - server: https://AB9B09ADC70261EBC4961AA05E7E3ED8.sk1.ap-south-2.eks.amazonaws.com
+      namespace: "*"
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"

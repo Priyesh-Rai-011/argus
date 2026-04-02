@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: s3-oidc-demo-appset
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - env: dev
+            cluster: dev-hub
+            server: https://kubernetes.default.svc
+            project: verbal-dev
+            path: clusters/dev
+            namespace: s3-oidc-demo
+          - env: prod
+            cluster: prod-183
+            server: https://AB9B09ADC70261EBC4961AA05E7E3ED8.sk1.ap-south-2.eks.amazonaws.com
+            project: verbal-prod
+            path: clusters/prod
+            namespace: s3-oidc-demo
+  template:
+    metadata:
+      name: "s3-oidc-demo-{{env}}"
+      labels:
+        app: s3-oidc-demo
+        env: "{{env}}"
+    spec:
+      project: "{{project}}"
+      source:
+        repoURL: https://github.com/Priyesh-Rai-011/verbal-aws-apps
+        targetRevision: main
+        path: "{{path}}"
+        directory:
+          recurse: true
+      destination:
+        server: "{{server}}"
+        namespace: "{{namespace}}"
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true
+        retry:
+          limit: 3
+          backoff:
+            duration: 10s
+            factor: 2
+            maxDuration: 3m

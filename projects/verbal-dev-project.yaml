@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: verbal-dev
+  namespace: argocd
+spec:
+  description: "Priyesh-Rai-011 Dev — account 185863138492 (ArgoCD hub lives here)"
+  sourceRepos:
+    - https://github.com/Priyesh-Rai-011/verbal-aws-apps
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: "*"
+  clusterResourceWhitelist:
+    - group: "*"
+      kind: "*"
+  namespaceResourceWhitelist:
+    - group: "*"
+      kind: "*"
